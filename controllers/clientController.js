@@ -9,7 +9,7 @@ export const getClients = async (req, res) => {
       res.status(200).json({ message: "No clients available", clients: [] });
     }
 
-    return res.status(200).json({ clients });
+    return res.status(200).json(clients);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
