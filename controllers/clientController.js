@@ -3,11 +3,8 @@ import Client from "../models/Client.js";
 //GET
 export const getClients = async (req, res) => {
   try {
-    const clients = await Client.find();
 
-    if (clients.length === 0) {
-      res.status(200).json({ message: "No clients available", clients: [] });
-    }
+    const clients = await Client.find();
 
     return res.status(200).json(clients);
   } catch (error) {
@@ -41,3 +38,21 @@ export const updateClient = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+export const deleteClient = async (req, res) => {
+  //still pending, but It will be a soft delete only. 
+
+  try {
+    const { id } = req.params;
+    const deletedClient = await Client.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!deletedClient) {
+      return res.status(404).json({ message: "Client not found" });
+    }
+
+    return res.status(200).json(deletedClient);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
