@@ -44,14 +44,16 @@ export const deleteClient = async (req, res) => {
 
   try {
     const { id } = req.params;
-    const deletedClient = await Client.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    if (!deletedClient) {
+    const client = await Client.findById(id);
+    if (!client) {
       return res.status(404).json({ message: "Client not found" });
     }
 
-    return res.status(200).json(deletedClient);
+    client.active = false
+
+    await client.save()
+
+    return res.status(200).json(client);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
